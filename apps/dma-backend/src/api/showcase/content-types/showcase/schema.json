@@ -21,12 +21,6 @@
     "description": {
       "type": "richtext"
     },
-    "services": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::service.service",
-      "mappedBy": "showcases"
-    },
     "cover_image": {
       "type": "media",
       "multiple": false,
@@ -37,6 +31,12 @@
         "videos",
         "audios"
       ]
+    },
+    "service": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::service.service",
+      "inversedBy": "showcases"
     }
   }
 }
