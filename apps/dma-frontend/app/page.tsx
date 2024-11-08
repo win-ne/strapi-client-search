@@ -22,7 +22,10 @@ export default function Home() {
   return (
     <div className="flex items-center justify-items-center p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-6 justify-center">
-        <p className="text-4xl">Digital Marketing Studio</p>
+        <span className="w-full flex justify-between">
+          <p className="text-4xl">Digital Marketing Studio</p>
+          <Link href="/search" className="bg-white/15 rounded p-3 font-bold hover:bg-white hover:text-black">Search</Link>
+        </span>
         <p className="text-3xl">Our Services</p>
         <div className="w-full flex flex-col gap-4">
           {categories.map((cat, index) => {
@@ -47,27 +50,29 @@ export default function Home() {
                     </div>
                     <span className="font-extrabold text-lg">{ser?.name}</span>
                     <div dangerouslySetInnerHTML={{ __html: rawMU }}></div>
-                    <hr className="my-5 border border-white/20" />
-                    <p className="font-semibold text-red-400">Showcase</p>
-                    {ser?.showcases.map((sc) => {
-                      const scImg = sc?.cover_image?.formats?.small
-                      return <div key={sc.documentId}>
-                        {scImg && <Image
-                          className="rounded-lg border-4 my-3 border-white/20 mx-auto"
-                          src={`http://localhost:1337${scImg.url}`}
-                          height={scImg.height}
-                          width={scImg.width}
-                          alt={scImg.name}
-                          unoptimized={true}
-                          priority={true}
-                        />}
-                        <span className="flex justify-between items-center my-2">
-                          <p className="font-bold">{sc.name}</p>
-                          <Link href={`https://${sc.link}`} className="text-red-400 text-sm font-extrabold">{sc.link}</Link>
-                        </span>
-                        <p>{sc.description}</p>
-                      </div>
-                    })}
+                    {/* <hr className="my-5 border border-white/20" /> */}
+                    <div className="bg-white grow mt-6 rounded-lg p-3 text-black">
+                      <p className="text-sm font-bold text-red-400">SHOWCASE</p>
+                      {ser?.showcases.map((sc) => {
+                        const scImg = sc?.cover_image?.formats?.small
+                        return <div key={sc.documentId}>
+                          {scImg && <Image
+                            className="rounded-lg my-3 mx-auto border-2 border-black/15"
+                            src={`http://localhost:1337${scImg.url}`}
+                            height={scImg.height}
+                            width={scImg.width}
+                            alt={scImg.name}
+                            unoptimized={true}
+                            priority={true}
+                          />}
+                          <span className="flex justify-between items-center my-2">
+                            <p className="font-bold">{sc.name}</p>
+                            <Link href={`https://${sc.link}`} className="text-red-400 text-sm font-extrabold">{sc.link}</Link>
+                          </span>
+                          <p>{sc.description}</p>
+                        </div>
+                      })}
+                    </div>
                   </div>
                 })}
               </div>
