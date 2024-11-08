@@ -1,12 +1,17 @@
 import qs from "qs";
-import { Category, StrapiError } from "@/app/lib/definitions/category";
+import { Category, StrapiError } from "@/app/lib/definitions/content-types";
 
-export async function getCategories(): Promise<StrapiError | Category> {
+export async function getCategories(): Promise<StrapiError | Category[]> {
     const query = qs.stringify(
         {
             populate: {
                 services: {
-                    populate: ['showcases']
+                    populate: {
+                        'cover_image': true,
+                        showcases: {
+                            populate: 'cover_image'
+                        }
+                    }
                 }
             }
         },
@@ -32,6 +37,8 @@ export async function getCategories(): Promise<StrapiError | Category> {
         }
     } else {
         const body = await resp.json()
+
+        console.log('body: ', body)
 
         if (body?.error) return body
 

@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Digital Management Studio",
-  description: "Digital Management Studio",
+  title: "Digital Marketing Studio",
+  description: "Digital Marketing Studio",
 };
 
 export default function RootLayout({

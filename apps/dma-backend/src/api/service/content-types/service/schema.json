@@ -15,9 +15,6 @@
     "name": {
       "type": "string"
     },
-    "description": {
-      "type": "blocks"
-    },
     "tagline": {
       "type": "string"
     },
@@ -43,6 +40,9 @@
         "videos",
         "audios"
       ]
+    },
+    "description": {
+      "type": "richtext"
     }
   }
 }
