@@ -1,7 +1,7 @@
 import qs from "qs";
 import { StrapiError, Service } from "../lib/definitions/content-types";
 
-export async function getService(id: number): Promise<StrapiError | Service> {
+export async function getService(documentId: string): Promise<StrapiError | Service> {
     const query = qs.stringify(
         {
             populate: {
@@ -16,7 +16,7 @@ export async function getService(id: number): Promise<StrapiError | Service> {
         }
     );
 
-    const resp = await fetch(`http://localhost:1337/api/services/${id}?${query}`, {
+    const resp = await fetch(`http://localhost:1337/api/services/${documentId}?${query}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

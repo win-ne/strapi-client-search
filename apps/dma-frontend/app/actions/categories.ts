@@ -8,9 +8,6 @@ export async function getCategories(): Promise<StrapiError | Category[]> {
                 services: {
                     populate: {
                         'cover_image': true,
-                        showcases: {
-                            populate: 'cover_image'
-                        }
                     }
                 }
             }
@@ -45,7 +42,7 @@ export async function getCategories(): Promise<StrapiError | Category[]> {
 }
 
 
-export async function getCategory(id: number): Promise<StrapiError | Category> {
+export async function getCategory(documentId: string): Promise<StrapiError | Category> {
     const query = qs.stringify(
         {
             populate: {
@@ -63,12 +60,12 @@ export async function getCategory(id: number): Promise<StrapiError | Category> {
             encodeValuesOnly: true,
         }
     );
-    const resp = await fetch(`http://localhost:1337/api/categories/${id}?${query}`, {
+    const resp = await fetch(`http://localhost:1337/api/categories/${documentId}?${query}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
-    })
+    });
 
     if (!resp.ok) {
         const err = await resp.text()

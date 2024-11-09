@@ -1,7 +1,7 @@
 import qs from "qs";
 import { StrapiError, Showcase } from "../lib/definitions/content-types";
 
-export async function getShowcase(id: number): Promise<StrapiError | Showcase> {
+export async function getShowcase(documentId: string): Promise<StrapiError | Showcase> {
     const query = qs.stringify(
         {
             populate: 'cover_image'
@@ -11,7 +11,7 @@ export async function getShowcase(id: number): Promise<StrapiError | Showcase> {
         }
     );
 
-    const resp = await fetch(`http://localhost:1337/api/showcases/${id}?${query}`, {
+    const resp = await fetch(`http://localhost:1337/api/showcases/${documentId}?${query}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
