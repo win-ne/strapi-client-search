@@ -26,7 +26,7 @@ function ShowcaseCard({ showcase, larger = false, linkable = false }: Props) {
             />}
             <span className="flex justify-between items-center my-2">
                 <p className="font-bold">{showcase.name}</p>
-                <Link href={`https://${showcase.link}`} className="text-red-400 text-sm font-extrabold">{showcase.link}</Link>
+                {linkable ? <p className="text-red-400 text-sm font-extrabold">{showcase.link}</p> : <Link href={`https://${showcase.link}`} className="text-red-400 text-sm font-extrabold">{showcase.link}</Link>}
             </span>
             <p>{showcase.description}</p>
         </div>
