@@ -31,7 +31,7 @@ function ServiceCard({ service, linkable = false }: Props) {
             <span className="font-extrabold text-lg">{service?.name}</span>
             <div dangerouslySetInnerHTML={{ __html: rawMU }}></div>
             {!linkable && service?.showcases && service?.showcases.map((showcase) => (
-                <ShowcaseCard showcase={showcase} key={`showcase-${showcase.id}`} larger={true} linkable={true} />
+                <ShowcaseCard showcase={showcase} key={`showcase-${showcase.id}`} larger={false} linkable={true} />
             ))}
         </div>
     )

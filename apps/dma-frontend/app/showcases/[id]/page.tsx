@@ -15,7 +15,7 @@ async function ShowcasePage({ params }: { params: Promise<{ id: string }> }) {
 
     return <div className="flex p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)] flex-col">
         <Header title="Showcase" />
-        {showcase?.id && <ShowcaseCard showcase={showcase} />}
+        {showcase?.id && <ShowcaseCard showcase={showcase} larger={true} />}
     </div>
 }
 
