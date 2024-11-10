@@ -1,7 +1,34 @@
 const qs = require("qs")
 const Fuse = require('fuse.js')
-const fs = require('node:fs')
-const path = require('node:path')
+const fs = require('fs');
+const path = require('path')
+
+async function saveImages(formats) {
+    const saveImage = async (imageUrl) => {
+        const pathFolders = imageUrl.split('/')
+        const imagePath = path.join(path.resolve(__dirname, '../public'), ...pathFolders)
+
+        try {
+            const response = await fetch(`http://localhost:1337${imageUrl}`);
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch image: ${response.statusText}`);
+            }
+
+            const arrayBuffer = await response.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+
+            fs.writeFileSync(imagePath, buffer);
+            console.log(`Image downloaded and saved to ${imagePath}`);
+        } catch (error) {
+            console.error(`Error downloading the image: ${error.message}`);
+        }
+    }
+
+    for (let size of ["thumbnail", "small", "medium", "large"]) {
+        saveImage(formats[size].url);
+    }
+}
 
 async function generateIndex() {
     const query = qs.stringify(
@@ -24,10 +51,7 @@ async function generateIndex() {
         }
     );
     const resp = await fetch(`http://localhost:1337/api/categories?${query}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        method: 'GET'
     })
 
     if (!resp.ok) {
@@ -55,41 +79,43 @@ async function generateIndex() {
                 cat["services"].forEach(service => {
                     if (service["showcases"]) {
                         service["showcases"].forEach(showcase => {
+                            saveImages(showcase.cover_image.formats)
                             showcase["type"] = "Showcases"
                             showcase["thumbnail"] = showcase.cover_image.formats.thumbnail.url
-                            delete showcase["id"]
-                            delete showcase["cover_image"]
-                            delete showcase["createdAt"]
-                            delete showcase["updatedAt"]
-                            delete showcase["publishedAt"]
+
+                            for (let key of ["id", "cover_image", "createdAt", "updatedAt", "publishedAt"]) {
+                                delete showcase[key];
+                            }
+
                             indexData.push(showcase)
                         })
                     }
 
+                    saveImages(service.cover_image.formats)
+
                     service["thumbnail"] = service.cover_image.formats.thumbnail.url
                     service["type"] = "Services"
-                    delete service["showcases"]
-                    delete service["cover_image"]
-                    delete service["id"]
-                    delete service["createdAt"]
-                    delete service["updatedAt"]
-                    delete service["publishedAt"]
+
+                    for (let key of ["showcases", "cover_image", "id", "createdAt", "updatedAt", "publishedAt"]) {
+                        delete service[key];
+                    }
+
                     indexData.push(service)
                 })
             }
 
-            delete cat["services"]
-            delete cat["id"]
-            delete cat["createdAt"]
-            delete cat["updatedAt"]
-            delete cat["publishedAt"]
+            for (let key of ["services", "id", "createdAt", "updatedAt", "publishedAt"]) {
+                delete cat[key];
+            }
+
             cat["type"] = "Categories"
+
             indexData.push(cat)
         });
 
         const fuseIndex = Fuse.createIndex(["name", "description", "link", "type"], indexData)
 
-        fs.writeFile(path.join(path.resolve(__dirname, '../public'), 'search_data.json'), JSON.stringify(indexData), err => {
+        fs.writeFile(path.join(path.resolve(__dirname, '../app/lib/data'), 'search_data.json'), JSON.stringify(indexData), err => {
             if (err) {
                 console.error(err);
             } else {
@@ -97,7 +123,7 @@ async function generateIndex() {
             }
         });
 
-        fs.writeFile(path.join(path.resolve(__dirname, '../public'), 'search_index.json'), JSON.stringify(fuseIndex.toJSON()), err => {
+        fs.writeFile(path.join(path.resolve(__dirname, '../app/lib/data'), 'search_index.json'), JSON.stringify(fuseIndex.toJSON()), err => {
             if (err) {
                 console.error(err);
             } else {
