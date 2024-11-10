@@ -40,7 +40,7 @@ function Search() {
                     </div>
                     <div className='max-w-20 h-auto bg-white/15 rounded-lg p-3 ms-5'>
                         <Image
-                            src={hit.thumbnail ? `http://localhost:1337${hit.thumbnail}` : `/window.svg`}
+                            src={hit.thumbnail || `/window.svg`}
                             height={120}
                             width={120}
                             alt={`${hit.name} search thumbnail`}

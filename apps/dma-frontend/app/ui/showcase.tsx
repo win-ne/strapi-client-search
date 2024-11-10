@@ -17,7 +17,7 @@ function ShowcaseCard({ showcase, larger = false, linkable = false }: Props) {
         <div key={showcase.documentId}>
             {scImg && <Image
                 className="rounded-lg my-3 mx-auto border-2 border-black/15"
-                src={`http://localhost:1337${scImg.url}`}
+                src={scImg.url}
                 height={scImg.height}
                 width={scImg.width}
                 alt={scImg.name}

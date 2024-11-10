@@ -20,7 +20,7 @@ function ServiceCard({ service, linkable = false }: Props) {
             <div
                 className="bg-white/5 rounded-lg w-full mb-6 flex justify-center align-center">
                 <Image
-                    src={`http://localhost:1337${img.url}`}
+                    src={img.url}
                     height={img.height}
                     width={img.width}
                     alt={img.name}
