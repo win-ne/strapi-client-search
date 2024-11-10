@@ -1,22 +1,16 @@
-'use client'
-
-import { useEffect, useState } from "react";
 import { getCategories } from "./actions/categories";
 import { Category } from "@/app/lib/definitions/content-types";
 import CategoryCard from "./ui/category";
 import Header from "./ui/header";
 import { StrapiError } from "./lib/definitions/request";
 
-export default function Home() {
-  const [categories, setCategories] = useState([] as Category[])
+export default async function Home() {
+  let categories = [] as Category[]
 
-  useEffect(() => {
-    getCategories().then((res) => {
-      if (!(res as StrapiError).error) {
-        setCategories(res as Category[])
-      }
-    })
-  }, [])
+  const resp = await getCategories()
+  if (!(resp as StrapiError).error) {
+    categories = resp as Category[]
+  }
 
   return (
     <div className="flex items-center justify-items-center p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
