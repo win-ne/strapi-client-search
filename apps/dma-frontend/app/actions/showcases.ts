@@ -1,37 +1,18 @@
-import qs from "qs";
-import { StrapiError, Showcase } from "../lib/definitions/content-types";
+import { Showcase } from "@/app/lib/definitions/content-types";
+import { makeStrapiGETRequest } from "@/app/lib/request";
+import { StrapiError } from "@/app/lib/definitions/request";
+
+export async function getShowcases(): Promise<StrapiError | Showcase[]> {
+    const [showcases, isError] = await makeStrapiGETRequest(
+        'showcases')
+    return isError ? showcases as StrapiError : showcases as Showcase[]
+}
 
 export async function getShowcase(documentId: string): Promise<StrapiError | Showcase> {
-    const query = qs.stringify(
+    const [showcases, isError] = await makeStrapiGETRequest(
+        `showcases/${documentId}`,
         {
             populate: 'cover_image'
-        },
-        {
-            encodeValuesOnly: true,
-        }
-    );
-
-    const resp = await fetch(`http://localhost:1337/api/showcases/${documentId}?${query}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-
-    if (!resp.ok) {
-        const err = await resp.text()
-
-        try {
-            const errResp = (JSON.parse(err)) as StrapiError
-            return errResp
-        } catch {
-            return { error: { message: err } }
-        }
-    } else {
-        const body = await resp.json()
-
-        if (body?.error) return body
-
-        return body?.data || body
-    }
+        })
+    return isError ? showcases as StrapiError : showcases as Showcase
 }

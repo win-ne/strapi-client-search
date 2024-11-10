@@ -1,8 +1,16 @@
-import qs from "qs";
-import { StrapiError, Service } from "../lib/definitions/content-types";
+import { Service } from "@/app/lib/definitions/content-types";
+import { makeStrapiGETRequest } from "@/app/lib/request";
+import { StrapiError } from "@/app/lib/definitions/request";
+
+export async function getServices(): Promise<StrapiError | Service[]> {
+    const [services, isError] = await makeStrapiGETRequest(
+        'services')
+    return isError ? services as StrapiError : services as Service[]
+}
 
 export async function getService(documentId: string): Promise<StrapiError | Service> {
-    const query = qs.stringify(
+    const [services, isError] = await makeStrapiGETRequest(
+        `services/${documentId}`,
         {
             populate: {
                 'cover_image': true,
@@ -10,33 +18,6 @@ export async function getService(documentId: string): Promise<StrapiError | Serv
                     populate: 'cover_image'
                 }
             }
-        },
-        {
-            encodeValuesOnly: true,
-        }
-    );
-
-    const resp = await fetch(`http://localhost:1337/api/services/${documentId}?${query}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-
-    if (!resp.ok) {
-        const err = await resp.text()
-
-        try {
-            const errResp = (JSON.parse(err)) as StrapiError
-            return errResp
-        } catch {
-            return { error: { message: err } }
-        }
-    } else {
-        const body = await resp.json()
-
-        if (body?.error) return body
-
-        return body?.data || body
-    }
+        })
+    return isError ? services as StrapiError : services as Service
 }

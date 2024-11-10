@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { getCategories } from "./actions/categories";
-import { Category, StrapiError } from "@/app/lib/definitions/content-types";
+import { Category } from "@/app/lib/definitions/content-types";
 import CategoryCard from "./ui/category";
 import Header from "./ui/header";
+import { StrapiError } from "./lib/definitions/request";
 
 export default function Home() {
   const [categories, setCategories] = useState([] as Category[])

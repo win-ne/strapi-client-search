@@ -41,9 +41,3 @@ export type Showcase = Base & {
     cover_image: CoverImage;
     link: string;
 }
-
-export type StrapiError = {
-    error: {
-        message: string;
-    }
-}

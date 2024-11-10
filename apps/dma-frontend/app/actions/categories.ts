@@ -1,9 +1,11 @@
-import qs from "qs";
-import { Category, StrapiError } from "@/app/lib/definitions/content-types";
+import { Category } from "@/app/lib/definitions/content-types";
+import { makeStrapiGETRequest } from "@/app/lib/request";
+import { StrapiError } from "@/app/lib/definitions/request";
 
-export async function getCategories(): Promise<StrapiError | Category[]> {
-    const query = qs.stringify(
-        {
+export async function getCategories(populate = true): Promise<StrapiError | Category[]> {
+    const [categories, isError] = await makeStrapiGETRequest(
+        'categories',
+        populate ? {
             populate: {
                 services: {
                     populate: {
@@ -11,39 +13,13 @@ export async function getCategories(): Promise<StrapiError | Category[]> {
                     }
                 }
             }
-        },
-        {
-            encodeValuesOnly: true,
-        }
-    );
-    const resp = await fetch(`http://localhost:1337/api/categories?${query}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-
-    if (!resp.ok) {
-        const err = await resp.text()
-
-        try {
-            const errResp = (JSON.parse(err)) as StrapiError
-            return errResp
-        } catch {
-            return { error: { message: err } }
-        }
-    } else {
-        const body = await resp.json()
-
-        if (body?.error) return body
-
-        return body?.data || body
-    }
+        } : {})
+    return isError ? categories as StrapiError : categories as Category[]
 }
 
-
 export async function getCategory(documentId: string): Promise<StrapiError | Category> {
-    const query = qs.stringify(
+    const [categories, isError] = await makeStrapiGETRequest(
+        `categories/${documentId}`,
         {
             populate: {
                 services: {
@@ -55,32 +31,6 @@ export async function getCategory(documentId: string): Promise<StrapiError | Cat
                     }
                 }
             }
-        },
-        {
-            encodeValuesOnly: true,
-        }
-    );
-    const resp = await fetch(`http://localhost:1337/api/categories/${documentId}?${query}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    });
-
-    if (!resp.ok) {
-        const err = await resp.text()
-
-        try {
-            const errResp = (JSON.parse(err)) as StrapiError
-            return errResp
-        } catch {
-            return { error: { message: err } }
-        }
-    } else {
-        const body = await resp.json()
-
-        if (body?.error) return body
-
-        return body?.data || body
-    }
+        })
+    return isError ? categories as StrapiError : categories as Category
 }
