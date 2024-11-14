@@ -9,7 +9,9 @@ export async function makeStrapiGETRequest(path: string, queryOptions: object | 
         }
     ) : ''
 
-    const resp = await fetch(`http://localhost:1337/api/${path}?${query}`, {
+    const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
+
+    const resp = await fetch(`${strapiUrl}/api/${path}?${query}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

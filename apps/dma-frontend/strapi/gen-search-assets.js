@@ -2,6 +2,7 @@ const qs = require("qs")
 const Fuse = require('fuse.js')
 const fs = require('fs')
 const path = require('path')
+const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
 
 async function saveImages(formats) {
     const saveImage = async (imageUrl) => {
@@ -9,7 +10,7 @@ async function saveImages(formats) {
         const imagePath = path.join(path.resolve(__dirname, '../public'), ...pathFolders)
 
         try {
-            const response = await fetch(`http://localhost:1337${imageUrl}`);
+            const response = await fetch(`${strapiUrl}${imageUrl}`);
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch image: ${response.statusText}`);
@@ -50,7 +51,7 @@ async function generateIndex() {
             encodeValuesOnly: true,
         }
     );
-    const resp = await fetch(`http://localhost:1337/api/categories?${query}`, {
+    const resp = await fetch(`${strapiUrl}/api/categories?${query}`, {
         method: 'GET'
     })
 
@@ -123,7 +124,7 @@ async function generateIndex() {
                 if (err) {
                     console.error(err);
                 } else {
-                    console.log(`Search data file written successfully to ${fpath}`)
+                    console.log(`Search data file successfully written to ${fpath}`)
                 }
             });
         }
