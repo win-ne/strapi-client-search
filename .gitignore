@@ -12,6 +12,6 @@
 #!.yarn/cache
 .pnp.*
 
-**/node_modules/
+**/node_modules/*
 
-.turbo/*
+**/.turbo/*

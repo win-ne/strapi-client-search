@@ -1,6 +1,6 @@
 const qs = require("qs")
 const Fuse = require('fuse.js')
-const fs = require('fs');
+const fs = require('fs')
 const path = require('path')
 
 async function saveImages(formats) {

@@ -19,6 +19,9 @@
                 "!.next/cache/**",
                 "dist/**"
             ]
+        },
+        "generate-search-assets": {
+            "cache": false
         }
     }
 }

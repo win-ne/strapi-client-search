@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-search-assets": "node strapi/search_index.js"
   },
   "dependencies": {
     "fuse.js": "^7.0.0",
