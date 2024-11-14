@@ -19,7 +19,7 @@ async function saveImages(formats) {
             const buffer = Buffer.from(arrayBuffer);
 
             fs.writeFileSync(imagePath, buffer);
-            console.log(`Image downloaded and saved to ${imagePath}`);
+            console.log(`Image successfully saved to ${imagePath}`);
         } catch (error) {
             console.error(`Error downloading the image: ${error.message}`);
         }
@@ -60,8 +60,8 @@ async function generateIndex() {
         try {
             const errResp = JSON.parse(err)
             console.log(errResp)
-        } catch {
-            console.log({ error: { message: err } })
+        } catch (err) {
+            console.log(`There was a problem fetching data from Strapi: ${err}`)
         }
     } else {
         let indexData = []
@@ -69,7 +69,8 @@ async function generateIndex() {
         const body = await resp.json()
 
         if (body?.error) {
-            respData = body
+            console.log(`There was a problem fetching data from Strapi: ${body.error}`)
+            return
         } else {
             respData = body?.data || body
         }
@@ -115,21 +116,20 @@ async function generateIndex() {
 
         const fuseIndex = Fuse.createIndex(["name", "description", "link", "type"], indexData)
 
-        fs.writeFile(path.join(path.resolve(__dirname, '../app/lib/data'), 'search_data.json'), JSON.stringify(indexData), err => {
-            if (err) {
-                console.error(err);
-            } else {
-                console.log("file written successfully")
-            }
-        });
+        const writeToFile = (fileName, fileData) => {
+            const fpath = path.join(path.resolve(__dirname, '../app/lib/data'), `${fileName}.json`)
 
-        fs.writeFile(path.join(path.resolve(__dirname, '../app/lib/data'), 'search_index.json'), JSON.stringify(fuseIndex.toJSON()), err => {
-            if (err) {
-                console.error(err);
-            } else {
-                console.log("file written successfully")
-            }
-        });
+            fs.writeFile(fpath, JSON.stringify(fileData), err => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log(`Search data file written successfully to ${fpath}`)
+                }
+            });
+        }
+
+        writeToFile('search_data', indexData)
+        writeToFile('search_index', fuseIndex.toJSON())
     }
 }
 

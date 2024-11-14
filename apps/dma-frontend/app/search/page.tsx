@@ -10,7 +10,8 @@ import Link from 'next/link'
 
 function Search() {
     const searchIndex = useMemo(() => Fuse.parseIndex(searchIndexData), [])
-    const options = useMemo(() => ({ keys: ["name", "description", "link", "type"], includeMatches: true, useExtendedSearch: true }), [])
+    const options = { keys: ["name", "description", "link", "type"] }
+
     const fuse = useMemo(() => new Fuse(searchData, options, searchIndex), [options, searchIndex])
 
     const [searchTerm, setSearchTerm] = useState('')
