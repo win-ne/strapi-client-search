@@ -30,7 +30,7 @@ function ServiceCard({ service, linkable = false }: Props) {
             </div>
             <span className="font-extrabold text-2xl">{service?.name}</span>
             <span className="font-semibold text-lg my-2">{service?.tagline}</span>
-            <div dangerouslySetInnerHTML={{ __html: rawMU }}></div>
+            <div className="text-gray-400" dangerouslySetInnerHTML={{ __html: rawMU }}></div>
             {!linkable && service?.showcases && service?.showcases.map((showcase) => (
                 <ShowcaseCard showcase={showcase} key={`showcase-${showcase.id}`} larger={false} linkable={true} />
             ))}
