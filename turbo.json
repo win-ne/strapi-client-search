@@ -10,7 +10,7 @@
                 "develop"
             ]
         },
-        "dma-backend#build": {
+        "build": {
             "dependsOn": [
                 "^build"
             ],
